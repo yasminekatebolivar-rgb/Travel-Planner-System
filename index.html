@@ -1,635 +1,544 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BarangayConnect - Modern Record Management System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        :root {
-            --background: #ffffff;
-            --foreground: #252525;
-            --card: #ffffff;
-            --card-foreground: #252525;
-            --primary: #030213;
-            --primary-foreground: #ffffff;
-            --secondary: #f3f3f5;
-            --secondary-foreground: #030213;
-            --muted: #ececf0;
-            --muted-foreground: #717182;
-            --accent: #e9ebef;
-            --accent-foreground: #030213;
-            --border: rgba(0, 0, 0, 0.1);
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Barangay Resident Record Management System</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--background);
-            color: var(--foreground);
-            line-height: 1.5;
-        }
+  <style>
+    /* =====: Root & Reset ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root{
+      --primary-green: #006400;
+      --dark-green: #004d00;
+      --gold: #ffd700;
+      --muted: #6b7280;
+      --bg: #f6f7f9;
+      --white: #ffffff;
+      --card-shadow: 0 8px 30px rgba(2, 64, 24, 0.08);
+      --glass: rgba(255,255,255,0.85);
+      --transition: 220ms cubic-bezier(.2,.9,.3,1);
+    }
+    html { scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
+    body { background: var(--bg); color: #222; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            line-height: 1.2;
-        }
+    /* ===== Header / Nav ===== */
+    header {
+      position: sticky; top: 0; z-index: 60;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+      backdrop-filter: blur(6px);
+      box-shadow: 0 6px 18px rgba(6, 25, 9, 0.04);
+    }
+    .nav {
+      max-width: 1200px; margin: 0 auto; padding: 14px 20px;
+      display:flex; align-items:center; gap: 12px; justify-content:space-between;
+    }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--primary-green); font-weight:700; font-size:1.15rem; }
+    .brand .logo { font-size:1.35rem; }
+    nav ul { display:flex; gap:18px; list-style:none; align-items:center; }
+    nav a { color:#213; text-decoration:none; font-weight:500; padding:6px 0; position:relative; }
+    nav a:hover { color:var(--primary-green); }
+    nav a::after { content:''; position:absolute; left:0; bottom:-6px; height:3px; width:0; background:var(--gold); transition: width var(--transition); border-radius:3px; }
+    nav a:hover::after { width:100%; }
 
-        h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            line-height: 1.3;
-        }
+    .nav-actions { display:flex; gap:12px; align-items:center; }
+    .btn {
+      border:0; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:600; transition: all var(--transition);
+      font-family:inherit;
+    }
+    .btn-ghost { background:transparent; color:#123; }
+    .btn-primary { background:var(--primary-green); color:var(--white); box-shadow: 0 8px 18px rgba(0,88,0,0.12); }
+    .btn-primary:hover { transform: translateY(-3px); background:var(--dark-green); box-shadow: 0 12px 30px rgba(0,60,0,0.12); }
 
-        h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            line-height: 1.4;
-        }
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 84vh;
+      display:grid; place-items:center;
+      background:
+        linear-gradient(180deg, rgba(0,40,0,0.35), rgba(0,40,0,0.18)),
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23e8f5e9" width="1200" height="600"/><circle cx="180" cy="110" r="50" fill="%23006400" opacity="0.06"/><circle cx="1000" cy="460" r="80" fill="%23ffd700" opacity="0.06"/></svg>');
+      background-size:cover; background-position:center;
+      padding: 48px 20px;
+    }
+    .hero-inner { max-width:1100px; width:100%; display:grid; grid-template-columns:1fr; gap:20px; text-align:center; color: #fff; }
+    .hero h1 { font-size: clamp(1.8rem, 4.6vw, 3.6rem); letter-spacing:1.6px; font-weight:700; text-shadow: 0 6px 28px rgba(0,0,0,0.35); }
+    .hero p { font-size: clamp(1rem, 1.6vw, 1.18rem); font-weight: 400; opacity:0.95; max-width:820px; margin:0 auto; text-shadow:0 4px 18px rgba(0,0,0,0.18); }
+    .hero-cta { display:flex; gap:12px; align-items:center; justify-content:center; margin-top:10px; }
 
-        h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            line-height: 1.5;
-        }
+    .cta {
+      padding:14px 26px; border-radius:10px; font-weight:700; cursor:pointer; border:0; transition: transform var(--transition), box-shadow var(--transition);
+      background: linear-gradient(180deg, var(--gold), #ffe37a); color:var(--primary-green);
+      box-shadow: 0 10px 30px rgba(255, 213, 0, 0.18);
+    }
+    .cta.secondary { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.12); }
 
-        p {
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-        }
+    .cta:hover { transform: translateY(-4px); }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.625rem 1.25rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-            text-decoration: none;
-        }
+    /* ===== Sections ===== */
+    main section { padding:64px 20px; max-width:1200px; margin:0 auto; }
+    h2.section-title { color:var(--primary-green); font-size:1.9rem; margin-bottom:18px; text-align:center; font-weight:700; position:relative; }
+    h2.section-title::after { content:''; width:72px; height:3px; background:var(--gold); display:block; margin:10px auto 0; border-radius:3px; }
 
-        .btn-primary {
-            background-color: var(--primary);
-            color: var(--primary-foreground);
-        }
+    /* About / cards */
+    .about-grid { display:grid; grid-template-columns: 1fr 360px; gap:24px; align-items:start; }
+    .about-left p { color:var(--muted); line-height:1.7; margin-bottom:12px; font-size:1rem; }
+    .about-cards { display:grid; gap:12px; margin-top:18px; }
+    .mini-card { background:var(--white); padding:14px; border-radius:10px; box-shadow:var(--card-shadow); border-left:4px solid var(--gold); }
+    .mini-card h4 { margin-bottom:6px; color:var(--primary-green); font-size:1rem; }
 
-        .btn-primary:hover {
-            opacity: 0.9;
-        }
+    /* Benefits */
+    .benefits { background:var(--white); padding:18px; border-radius:10px; box-shadow:var(--card-shadow); margin-top:18px; }
+    .benefits ul { list-style:none; color:var(--muted); display:grid; gap:8px; }
+    .benefits li::before { content:'✓'; color:var(--gold); margin-right:8px; font-weight:700; }
 
-        .btn-secondary {
-            background-color: var(--secondary);
-            color: var(--secondary-foreground);
-        }
+    /* Features grid */
+    .features-grid { margin-top:12px; display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:18px; }
+    .feature-card { background:var(--white); padding:20px; border-radius:12px; box-shadow:var(--card-shadow); border-left:6px solid rgba(0,100,0,0.06); transition: transform var(--transition), box-shadow var(--transition); }
+    .feature-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(3, 85, 27, 0.08); border-left-color:var(--gold); }
+    .feature-card h3 { font-size:1.05rem; color:var(--primary-green); margin-bottom:8px; display:flex; gap:8px; align-items:center; }
+    .feature-card ul { list-style:none; color:var(--muted); margin-top:8px; }
+    .feature-card li { padding:6px 0; }
 
-        .btn-secondary:hover {
-            background-color: var(--accent);
-        }
+    /* Contact */
+    .contact-grid { display:grid; grid-template-columns:1fr 380px; gap:20px; align-items:start; }
+    .contact-form { background:var(--white); padding:18px; border-radius:10px; box-shadow:var(--card-shadow); }
+    .field { margin-bottom:12px; }
+    label { display:block; font-weight:600; margin-bottom:6px; color:#111; font-size:0.95rem; }
+    input, textarea, select { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e6e6; font-size:0.95rem; }
+    input:focus, textarea:focus { outline:none; box-shadow:0 6px 20px rgba(0,100,0,0.06); border-color:var(--primary-green); }
+    .send-btn { width:100%; background:var(--primary-green); color:var(--white); padding:12px; border-radius:8px; border:0; cursor:pointer; font-weight:700; }
+    .send-btn:hover { background:var(--dark-green); transform:translateY(-3px); }
 
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--border);
-            color: var(--foreground);
-        }
+    .contact-details { background:var(--white); padding:18px; border-radius:10px; box-shadow:var(--card-shadow); }
+    .detail-item { margin-bottom:12px; }
+    .detail-item h4 { color:var(--primary-green); margin-bottom:6px; }
+    .support-note { background:#e8f5e9; padding:12px; border-left:4px solid var(--primary-green); border-radius:8px; margin-top:10px; color:#123; }
 
-        .btn-outline:hover {
-            background-color: var(--accent);
-        }
+    /* Footer */
+    footer { background:var(--primary-green); color:var(--white); padding:22px; text-align:center; margin-top:28px; border-radius:6px 6px 0 0; }
 
-        .btn-lg {
-            padding: 0.875rem 1.75rem;
-            font-size: 1rem;
-        }
+    /* Modal */
+    .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center; z-index:120; }
+    .modal-backdrop.show { display:flex; animation: fadeIn .22s ease; }
+    @keyframes fadeIn { from { opacity: 0 } to { opacity:1 } }
+    .modal-box { width:100%; max-width:420px; background:var(--white); border-radius:12px; padding:22px; transform: scale(.98); opacity:0; animation: popIn .22s cubic-bezier(.2,.9,.3,1) forwards; box-shadow: 0 18px 50px rgba(5,40,20,0.12); }
+    @keyframes popIn { to { transform: scale(1); opacity:1 } }
 
-        .card {
-            background-color: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            transition: border-color 0.2s;
-        }
+    .modal-box h3 { color:var(--primary-green); text-align:center; margin-bottom:12px; }
+    .modal-row { display:flex; gap:10px; }
+    .modal-actions { display:flex; gap:10px; margin-top:14px; }
+    .modal-btn { flex:1; padding:10px 12px; border-radius:8px; border:0; cursor:pointer; font-weight:700; }
+    .modal-btn.cancel { background:#eee; color:#333; }
+    .modal-btn.login { background:var(--primary-green); color:#fff; }
 
-        .card:hover {
-            border-color: rgba(0, 0, 0, 0.2);
-        }
+    /* Toast */
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: linear-gradient(180deg, #0b7a33, #066422);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 10px;
+      box-shadow: 0 12px 36px rgba(2,50,20,0.18);
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 260ms ease, transform 260ms ease;
+      z-index:140;
+    }
+    .toast.show { opacity:1; transform: translateY(0); }
 
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.375rem 0.75rem;
-            border-radius: 9999px;
-            background-color: var(--secondary);
-            color: var(--secondary-foreground);
-            font-size: 0.875rem;
-        }
-
-        .icon-wrapper {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(3, 2, 19, 0.1);
-        }
-
-        .pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 4rem;
-            left: 0;
-            right: 0;
-            background-color: var(--background);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem;
-            z-index: 40;
-        }
-
-        .mobile-menu.active {
-            display: block;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            h2 {
-                font-size: 1.75rem;
-            }
-        }
-    </style>
+    /* Responsive */
+    @media (max-width: 940px){
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .nav ul { display:none; }
+    }
+    @media (max-width: 520px){
+      .hero p { font-size: 0.98rem; }
+      .nav { padding:12px; }
+      .brand { font-size:1rem; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b" style="border-color: var(--border);">
-        <div class="container mx-auto px-4" style="max-width: 1200px;">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: var(--primary); color: var(--primary-foreground);">
-                        <span style="font-weight: 600;">B</span>
-                    </div>
-                    <span style="font-weight: 500; letter-spacing: -0.025em;">BarangayConnect</span>
-                </div>
-                
-                <nav class="hidden md:flex items-center gap-8">
-                    <a href="#features" style="color: var(--muted-foreground); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--muted-foreground)'">Features</a>
-                    <a href="#benefits" style="color: var(--muted-foreground); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--muted-foreground)'">Benefits</a>
-                    <a href="#pricing" style="color: var(--muted-foreground); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--muted-foreground)'">Pricing</a>
-                    <a href="#contact" style="color: var(--muted-foreground); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--muted-foreground)'">Contact</a>
-                </nav>
 
-                <div class="flex items-center gap-3">
-                    <button class="btn btn-secondary hidden md:inline-flex">Sign In</button>
-                    <button class="btn btn-primary">Get Started</button>
-                    <button class="md:hidden p-2" onclick="toggleMobileMenu()" style="background: transparent; border: none; cursor: pointer;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="3" y1="12" x2="21" y2="12"></line>
-                            <line x1="3" y1="6" x2="21" y2="6"></line>
-                            <line x1="3" y1="18" x2="21" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+  <!-- HEADER -->
+  <header>
+    <div class="nav" role="navigation" aria-label="Main Navigation">
+      <a class="brand" href="#home"><span class="logo">🏛️</span><span>BRRMS</span></a>
 
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="mobile-menu">
-        <nav class="flex flex-col gap-4">
-            <a href="#features" style="color: var(--foreground); text-decoration: none;" onclick="toggleMobileMenu()">Features</a>
-            <a href="#benefits" style="color: var(--foreground); text-decoration: none;" onclick="toggleMobileMenu()">Benefits</a>
-            <a href="#pricing" style="color: var(--foreground); text-decoration: none;" onclick="toggleMobileMenu()">Pricing</a>
-            <a href="#contact" style="color: var(--foreground); text-decoration: none;" onclick="toggleMobileMenu()">Contact</a>
-        </nav>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-ghost" id="homeBtn" title="Go to top">Home</button>
+        <button class="btn btn-primary" id="loginOpen">Login</button>
+      </div>
     </div>
+  </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section style="padding-top: 8rem; padding-bottom: 4rem;">
-            <div class="container mx-auto px-4" style="max-width: 1200px;">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
-                    <div style="display: flex; flex-direction: column; gap: 2rem;">
-                        <div class="badge">
-                            <span style="width: 0.5rem; height: 0.5rem; border-radius: 9999px; background-color: var(--primary);" class="pulse"></span>
-                            <span>Trusted by 300+ barangays nationwide</span>
-                        </div>
-                        
-                        <div style="display: flex; flex-direction: column; gap: 1rem;">
-                            <h1>Modern Record Management for Your Barangay</h1>
-                            <p style="color: var(--muted-foreground); max-width: 32rem;">
-                                Digitalize your barangay operations with efficient resident records, certificate issuance, and community services management.
-                            </p>
-                        </div>
+  <!-- HERO -->
+  <section class="hero" id="home" aria-labelledby="hero-heading">
+    <div class="hero-inner">
+      <h1 id="hero-heading">Digital • Centralized • Secure</h1>
+      <p>Modernize barangay operations with accurate, efficient, and centralized resident data management. Eliminate paperwork. Enhance transparency. Empower your community.</p>
 
-                        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
-                            <button class="btn btn-primary btn-lg">
-                                Start Free Trial
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
-                            </button>
-                            <button class="btn btn-outline btn-lg">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polygon points="10 8 16 12 10 16 10 8"></polygon>
-                                </svg>
-                                Watch Demo
-                            </button>
-                        </div>
+      <div class="hero-cta">
+        <button class="cta" id="getStarted">Get Started</button>
+        <button class="cta secondary" id="learnMore" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">View Features</button>
+      </div>
+    </div>
+  </section>
 
-                        <div style="display: flex; align-items: center; gap: 2rem; padding-top: 1rem; flex-wrap: wrap;">
-                            <div>
-                                <div style="font-size: 1.5rem; font-weight: 500; letter-spacing: -0.025em;">10K+</div>
-                                <p style="color: var(--muted-foreground);">Active Users</p>
-                            </div>
-                            <div style="width: 1px; height: 3rem; background-color: var(--border);"></div>
-                            <div>
-                                <div style="font-size: 1.5rem; font-weight: 500; letter-spacing: -0.025em;">98%</div>
-                                <p style="color: var(--muted-foreground);">Satisfaction Rate</p>
-                            </div>
-                            <div style="width: 1px; height: 3rem; background-color: var(--border);"></div>
-                            <div>
-                                <div style="font-size: 1.5rem; font-weight: 500; letter-spacing: -0.025em;">24/7</div>
-                                <p style="color: var(--muted-foreground);">Support</p>
-                            </div>
-                        </div>
-                    </div>
+  <main>
+    <!-- ABOUT (merged) -->
+    <section id="about" aria-labelledby="about-title">
+      <h2 class="section-title" id="about-title">About the System</h2>
 
-                    <div style="position: relative;">
-                        <div style="position: absolute; inset: 0; background: linear-gradient(to top right, rgba(3, 2, 19, 0.2), rgba(233, 235, 239, 0.2)); border-radius: 1rem; filter: blur(3rem);"></div>
-                        <img src="https://images.unsplash.com/photo-1722643882339-7a6c9cb080db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBtZWV0aW5nJTIwZ292ZXJuYW5jZXxlbnwxfHx8fDE3NjEwNDk4MDN8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Community governance and collaboration" style="position: relative; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); width: 100%; object-fit: cover; aspect-ratio: 4/3;">
-                    </div>
-                </div>
-            </div>
-        </section>
+      <div class="about-grid">
+        <div class="about-left">
+          <p>The <strong>Barangay Resident Record Management System (BRRMS)</strong> is a digital platform designed to help barangay staff efficiently record, organize, and manage resident and household information.</p>
 
-        <!-- Features Section -->
-        <section id="features" style="padding: 4rem 0; background-color: rgba(236, 236, 240, 0.3);">
-            <div class="container mx-auto px-4" style="max-width: 1200px;">
-                <div style="text-align: center; margin-bottom: 4rem;">
-                    <div style="display: inline-flex; padding: 0.375rem 0.75rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); color: var(--primary); margin-bottom: 1rem;">
-                        Features
-                    </div>
-                    <h2 style="margin-bottom: 1rem;">Complete Barangay Management Solution</h2>
-                    <p style="color: var(--muted-foreground); max-width: 42rem; margin: 0 auto;">
-                        Powerful tools designed to modernize barangay operations and serve your community better.
-                    </p>
-                </div>
+          <p>This system replaces traditional paper forms and manual spreadsheets with a centralized and secure database to ensure data accuracy, accessibility, and confidentiality.</p>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-                    <!-- Feature 1 -->
-                    <div class="card">
-                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                        </div>
-                        <h3 style="margin-bottom: 0.75rem;">Resident Database</h3>
-                        <p style="color: var(--muted-foreground);">Complete digital records of all barangay residents with household information and demographics.</p>
-                    </div>
+          <p>Authorized barangay personnel can add, update, search, and generate reports on resident data—supporting local governance, population monitoring, and planning initiatives.</p>
 
-                    <!-- Feature 2 -->
-                    <div class="card">
-                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <path d="m9 15 2 2 4-4"></path>
-                            </svg>
-                        </div>
-                        <h3 style="margin-bottom: 0.75rem;">Barangay Clearance</h3>
-                        <p style="color: var(--muted-foreground);">Issue barangay clearance certificates digitally with automated validation and tracking.</p>
-                    </div>
-
-                    <!-- Feature 3 -->
-                    <div class="card">
-                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="14" width="7" height="7"></rect>
-                                <rect x="3" y="14" width="7" height="7"></rect>
-                            </svg>
-                        </div>
-                        <h3 style="margin-bottom: 0.75rem;">Certificate Issuance</h3>
-                        <p style="color: var(--muted-foreground);">Generate certificates of residency, indigency, and other barangay documents instantly.</p>
-                    </div>
-
-                    <!-- Feature 4 -->
-                    <div class="card">
-                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                <path d="M9 12h6"></path>
-                                <path d="M9 16h6"></path>
-                            </svg>
-                        </div>
-                        <h3 style="margin-bottom: 0.75rem;">Blotter Management</h3>
-                        <p style="color: var(--muted-foreground);">Record and track barangay incidents, complaints, and resolutions systematically.</p>
-                    </div>
-
-                    <!-- Feature 5 -->
-                    <div class="card">
-                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.35-4.35"></path>
-                                <path d="M11 8v6"></path>
-                                <path d="M8 11h6"></path>
-                            </svg>
-                        </div>
-                        <h3 style="margin-bottom: 0.75rem;">Business Permits</h3>
-                        <p style="color: var(--muted-foreground);">Process and manage barangay business permit applications and renewals efficiently.</p>
-                    </div>
-
-                    <!-- Feature 6 -->
-                    <div class="card">
-                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                <path d="m9 12 2 2 4-4"></path>
-                            </svg>
-                        </div>
-                        <h3 style="margin-bottom: 0.75rem;">Data Security</h3>
-                        <p style="color: var(--muted-foreground);">Secure storage with role-based access control compliant with Data Privacy Act.</p>
-                    </div>
-
-                    <!-- Feature 7 -->
-                    <div class="card">
-                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-                                <line x1="18" y1="20" x2="18" y2="10"></line>
-                                <line x1="12" y1="20" x2="12" y2="4"></line>
-                                <line x1="6" y1="20" x2="6" y2="14"></line>
-                            </svg>
-                        </div>
-                        <h3 style="margin-bottom: 0.75rem;">Reports & Analytics</h3>
-                        <p style="color: var(--muted-foreground);">Generate population reports, statistics, and compliance documents for government submission.</p>
-                    </div>
-
-                    <!-- Feature 8 -->
-                    <div class="card">
-                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                <polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </div>
-                        <h3 style="margin-bottom: 0.75rem;">Document Archive</h3>
-                        <p style="color: var(--muted-foreground);">Maintain organized archives of resolutions, ordinances, and official barangay records.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Benefits Section -->
-        <section id="benefits" style="padding: 4rem 0;">
-            <div class="container mx-auto px-4" style="max-width: 1200px;">
-                <div class="grid lg:grid-cols-2 gap-12 items-center">
-                    <div class="order-2 lg:order-1">
-                        <img src="https://images.unsplash.com/photo-1709100450223-e8333fa09988?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsb2NhbCUyMGdvdmVybm1lbnQlMjBvZmZpY2V8ZW58MXx8fHwxNzYxMDQ5ODA1fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Modern barangay office operations" style="border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); width: 100%; object-fit: cover; aspect-ratio: 4/3;">
-                    </div>
-
-                    <div style="display: flex; flex-direction: column; gap: 1.5rem;" class="order-1 lg:order-2">
-                        <div>
-                            <div style="display: inline-flex; padding: 0.375rem 0.75rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); color: var(--primary); margin-bottom: 1rem;">
-                                Benefits
-                            </div>
-                            <h2 style="margin-bottom: 1rem;">Modernize Your Barangay Operations</h2>
-                            <p style="color: var(--muted-foreground);">
-                                Empower your barangay with digital tools that improve efficiency, transparency, and service delivery to constituents.
-                            </p>
-                        </div>
-
-                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 1rem;">
-                            <li style="display: flex; align-items: start; gap: 0.75rem;">
-                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <span>Reduce processing time for certificates from days to minutes</span>
-                            </li>
-                            <li style="display: flex; align-items: start; gap: 0.75rem;">
-                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <span>Eliminate paper-based records and filing cabinets</span>
-                            </li>
-                            <li style="display: flex; align-items: start; gap: 0.75rem;">
-                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <span>Access resident data securely from any device</span>
-                            </li>
-                            <li style="display: flex; align-items: start; gap: 0.75rem;">
-                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <span>Generate accurate population reports instantly</span>
-                            </li>
-                            <li style="display: flex; align-items: start; gap: 0.75rem;">
-                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <span>Comply with Data Privacy Act requirements</span>
-                            </li>
-                            <li style="display: flex; align-items: start; gap: 0.75rem;">
-                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
-                                </div>
-                                <span>Improve transparency and accountability in barangay services</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA Section -->
-        <section style="padding: 4rem 0;">
-            <div class="container mx-auto px-4" style="max-width: 1200px;">
-                <div style="position: relative; overflow: hidden; border-radius: 1.5rem; background: linear-gradient(to bottom right, var(--primary), rgba(3, 2, 19, 0.8)); padding: 4rem 2rem;">
-                    <div style="position: absolute; inset: 0; opacity: 0.1;">
-                        <img src="https://images.unsplash.com/photo-1758411898049-4de9588be514?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkaWdpdGFsJTIwZGFzaGJvYXJkJTIwaW50ZXJmYWNlfGVufDF8fHx8MTc2MTA0MDUyMXww&ixlib=rb-4.1.0&q=80&w=1080" alt="Dashboard interface" style="width: 100%; height: 100%; object-fit: cover;">
-                    </div>
-                    
-                    <div style="position: relative; z-index: 10; text-align: center; max-width: 48rem; margin: 0 auto; color: white;">
-                        <h2 style="color: white; margin-bottom: 1.5rem;">Ready to Digitalize Your Barangay?</h2>
-                        <p style="opacity: 0.9; max-width: 42rem; margin: 0 auto 2rem;">
-                            Join hundreds of barangays nationwide who have modernized their operations. 
-                            Start your free 30-day trial today—no credit card required.
-                        </p>
-                        
-                        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; padding-top: 1rem;">
-                            <button class="btn btn-secondary btn-lg">
-                                Start Free Trial
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
-                            </button>
-                            <button class="btn btn-outline btn-lg" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: white;">
-                                Schedule Demo
-                            </button>
-                        </div>
-
-                        <p style="opacity: 0.7; padding-top: 1.5rem; font-size: 0.875rem;">
-                            Free 30-day trial • No credit card required • Cancel anytime
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer style="border-top: 1px solid var(--border); background-color: rgba(236, 236, 240, 0.3);">
-        <div class="container mx-auto px-4 py-12" style="max-width: 1200px;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <div style="width: 2rem; height: 2rem; background-color: var(--primary); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--primary-foreground); font-weight: 600;">
-                            B
-                        </div>
-                        <span style="font-weight: 500; letter-spacing: -0.025em;">BarangayConnect</span>
-                    </div>
-                    <p style="color: var(--muted-foreground);">
-                        Modern barangay management made simple.
-                    </p>
-                    <div style="display: flex; gap: 0.75rem;">
-                        <a href="#" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background-color: var(--muted); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--foreground);">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                            </svg>
-                        </a>
-                        <a href="#" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background-color: var(--muted); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--foreground);">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
-                            </svg>
-                        </a>
-                        <a href="#" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background-color: var(--muted); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--foreground);">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                                <rect x="2" y="9" width="4" height="12"></rect>
-                                <circle cx="4" cy="4" r="2"></circle>
-                            </svg>
-                        </a>
-                        <a href="#" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background-color: var(--muted); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--foreground);">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 style="margin-bottom: 1rem;">Product</h4>
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Features</a></li>
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Pricing</a></li>
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Security</a></li>
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Roadmap</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 style="margin-bottom: 1rem;">Company</h4>
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">About Us</a></li>
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Careers</a></li>
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Blog</a></li>
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Contact</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 style="margin-bottom: 1rem;">Resources</h4>
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Documentation</a></li>
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Help Center</a></li>
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">API Reference</a></li>
-                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Community</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div style="padding-top: 2rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 1rem; align-items: center; justify-content: space-between;">
-                <p style="color: var(--muted-foreground); text-align: center;">
-                    © 2025 BarangayConnect. All rights reserved.
-                </p>
-                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
-                    <a href="#" style="color: var(--muted-foreground); text-decoration: none;">Privacy Policy</a>
-                    <a href="#" style="color: var(--muted-foreground); text-decoration: none;">Terms of Service</a>
-                </div>
-            </div>
+          <div class="benefits" aria-hidden="false">
+            <strong style="color:var(--primary-green);display:block;margin-bottom:8px;">Benefits</strong>
+            <ul>
+              <li>Improves accuracy of resident data</li>
+              <li>Reduces paperwork and redundancy</li>
+              <li>Enables faster certificate processing and reporting</li>
+              <li>Enhances transparency and accountability</li>
+            </ul>
+          </div>
         </div>
-    </footer>
 
-    <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('active');
+        <aside>
+          <div class="about-cards">
+            <div class="mini-card">
+              <h4>💡 Purpose</h4>
+              <p>To streamline barangay record-keeping, promote efficiency, and support data-driven decision-making.</p>
+            </div>
+
+            <div class="mini-card">
+              <h4>👤 Access Level</h4>
+              <p>Single-user / Admin-only (authorized barangay staff) to protect sensitive resident information.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" aria-labelledby="features-title">
+      <h2 class="section-title" id="features-title">Key Features</h2>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>🧾 Resident Information Management</h3>
+          <ul>
+            <li>Add new resident profiles</li>
+            <li>View complete resident details</li>
+            <li>Update existing records</li>
+            <li>Remove outdated or duplicate entries</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🏠 Household Profiling</h3>
+          <ul>
+            <li>Group residents by household</li>
+            <li>Identify head of family</li>
+            <li>Track number of household members</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🔎 Search & Filter</h3>
+          <ul>
+            <li>Search by name, age, or address (purok)</li>
+            <li>Filters: senior citizens, minors, PWDs</li>
+            <li>Filters: students, employed/unemployed, voters/non-voters</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🏷️ Categorization / Tagging</h3>
+          <ul>
+            <li>Senior Citizen • PWD • Student</li>
+            <li>Employed / Unemployed</li>
+            <li>Voter / Non-voter</li>
+            <li>New / Transferred out</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>📊 Reporting & Statistics</h3>
+          <ul>
+            <li>Total population count</li>
+            <li>Number of households</li>
+            <li>Age group distribution</li>
+            <li>Exportable reports (PDF / Excel)</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>🔒 Admin-Only Access</h3>
+          <ul>
+            <li>Restricted to barangay personnel</li>
+            <li>Protect privacy and sensitive info</li>
+            <li>Secure authentication system</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <h3>⚙️ Optional Enhancements</h3>
+          <ul>
+            <li>Resident photo / ID upload</li>
+            <li>Emergency contacts</li>
+            <li>Residency status (active/inactive)</li>
+            <li>Purok / address mapping</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" aria-labelledby="contact-title">
+      <h2 class="section-title" id="contact-title">Contact Us</h2>
+
+      <div class="contact-grid">
+        <div class="contact-form" aria-labelledby="contact-form-title">
+          <form id="contactForm" novalidate>
+            <div class="field">
+              <label for="fullName">Full Name</label>
+              <input id="fullName" name="fullName" type="text" placeholder="Your full name" required>
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
+            </div>
+
+            <button type="submit" class="send-btn">Send Message</button>
+          </form>
+        </div>
+
+        <aside class="contact-details" aria-labelledby="contact-details-title">
+          <div class="detail-item">
+            <h4>📍 Address</h4>
+            <p>Barangay IT Office, Municipality Hall Complex</p>
+          </div>
+
+          <div class="detail-item">
+            <h4>📞 Phone</h4>
+            <p>(02) 1234-5678</p>
+          </div>
+
+          <div class="detail-item">
+            <h4>✉️ Email</h4>
+            <p>info@barangayrecords.ph</p>
+          </div>
+
+          <div class="detail-item">
+            <h4>🕒 Office Hours</h4>
+            <p>Monday–Friday, 8:00 AM–5:00 PM</p>
+          </div>
+
+          <div class="support-note">
+            <strong>For system support or inquiries, please contact the Barangay IT Solutions Team.</strong>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Barangay Resident Record Management System. All Rights Reserved.</p>
+  </footer>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <h3 id="loginTitle">System Login</h3>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" placeholder="Enter username" required>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Enter password" required>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center;margin-top:4px;">
+          <label style="font-weight:600;color:#222;">Role:</label>
+          <label style="display:flex;gap:6px;align-items:center;"><input type="radio" name="userRole" value="admin" checked> Admin</label>
+          <label style="display:flex;gap:6px;align-items:center;"><input type="radio" name="userRole" value="staff"> Staff</label>
+        </div>
+
+        <div class="modal-actions" style="margin-top:18px;">
+          <button type="button" class="modal-btn cancel" id="modalCancel">Cancel</button>
+          <button type="submit" class="modal-btn login">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script>
+    // ===== Helper: select =====
+    const $ = (sel, ctx=document) => ctx.querySelector(sel);
+
+    // ===== Smooth scroll actions =====
+    $('#getStarted').addEventListener('click', () => {
+      document.getElementById('about').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    $('#homeBtn').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    // allow nav anchors (works on hidden nav in mobile too)
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const target = a.getAttribute('href').slice(1);
+        if (!target) return;
+        const el = document.getElementById(target);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({behavior:'smooth', block: 'start'});
         }
+      });
+    });
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    </script>
+    // ===== Modal logic =====
+    const modalBackdrop = $('#modalBackdrop');
+    const loginOpen = $('#loginOpen');
+    const modalCancel = $('#modalCancel');
+    const loginForm = $('#loginForm');
+
+    function openModal(){
+      modalBackdrop.classList.add('show');
+      modalBackdrop.setAttribute('aria-hidden','false');
+      // focus first input a little after open for accessibility
+      setTimeout(()=> $('#username')?.focus(), 220);
+    }
+    function closeModal(){
+      modalBackdrop.classList.remove('show');
+      modalBackdrop.setAttribute('aria-hidden','true');
+      loginForm.reset();
+    }
+
+    loginOpen.addEventListener('click', openModal);
+    modalCancel.addEventListener('click', closeModal);
+
+    // close when clicking backdrop (but not when clicking modal box)
+    modalBackdrop.addEventListener('click', (evt) => {
+      if (evt.target === modalBackdrop) closeModal();
+    });
+
+    // ESC to close
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // Login form submit + validation
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = $('#username').value.trim();
+      const password = $('#password').value.trim();
+      const role = loginForm.userRole.value;
+
+      if (!username || !password) {
+        showToast('Please enter your username and password', { error:true });
+        return;
+      }
+
+      // Placeholder behavior: log and show success
+      console.log(`Login attempt — role: ${role}, username: ${username}`);
+      showToast(`Welcome, ${username}! Logged in as ${role.toUpperCase()}.`);
+      closeModal();
+    });
+
+    // ===== Contact form handling =====
+    const contactForm = $('#contactForm');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = $('#fullName').value.trim();
+      const email = $('#email').value.trim();
+      const message = $('#message').value.trim();
+
+      if (!name || !email || !message) {
+        showToast('Please complete Full Name, Email, and Message fields', { error:true });
+        return;
+      }
+
+      // Basic email format check (simple)
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRe.test(email)) {
+        showToast('Please enter a valid email address', { error:true });
+        return;
+      }
+
+      // fake submit — show toast success
+      showToast(`Thank you, ${name}! Your message has been received.`);
+      contactForm.reset();
+      console.log('Contact message:', { name, email, message });
+    });
+
+    // ===== Toast utility =====
+    const toast = $('#toast');
+    let toastTimer = null;
+    function showToast(text, { duration=3500, error=false } = {}){
+      clearTimeout(toastTimer);
+      toast.textContent = text;
+      toast.style.background = error ? 'linear-gradient(180deg,#8b1c24,#6f0f12)' : 'linear-gradient(180deg,#0b7a33,#066422)';
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => { toast.classList.remove('show'); }, duration);
+    }
+
+    // Accessibility: focus trap rudimentary (keeps focus inside modal while open)
+    document.addEventListener('focusin', (e) => {
+      if (modalBackdrop.classList.contains('show')) {
+        const isInside = modalBackdrop.contains(e.target);
+        if (!isInside) $('#username')?.focus();
+      }
+    });
+
+    // Small enhancement: reveal animation for sections (intersection observer)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(ent => {
+        if (ent.isIntersecting) {
+          ent.target.style.opacity = 1;
+          ent.target.style.transform = 'none';
+          observer.unobserve(ent.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('main section, .feature-card, .mini-card').forEach(el => {
+      el.style.opacity = 0;
+      el.style.transform = 'translateY(18px)';
+      el.style.transition = 'opacity 520ms ease, transform 520ms ease';
+      observer.observe(el);
+    });
+  </script>
 </body>
 </html>
