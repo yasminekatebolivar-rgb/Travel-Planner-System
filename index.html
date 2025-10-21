@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarangayConnect - Modern Record Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --background: #ffffff;
+            --foreground: #252525;
+            --card: #ffffff;
+            --card-foreground: #252525;
+            --primary: #030213;
+            --primary-foreground: #ffffff;
+            --secondary: #f3f3f5;
+            --secondary-foreground: #030213;
+            --muted: #ececf0;
+            --muted-foreground: #717182;
+            --accent: #e9ebef;
+            --accent-foreground: #030213;
+            --border: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.5;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        p {
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--foreground);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-lg {
+            padding: 0.875rem 1.75rem;
+            font-size: 1rem;
+        }
+
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            font-size: 0.875rem;
+        }
+
+        .icon-wrapper {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(3, 2, 19, 0.1);
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 4rem;
+            left: 0;
+            right: 0;
+            background-color: var(--background);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem;
+            z-index: 40;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b" style="border-color: var(--border);">
+        <div class="container mx-auto px-4" style="max-width: 1200px;">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: var(--primary); color: var(--primary-foreground);">
+                        <span style="font-weight: 600;">B</span>
+                    </div>
+                    <span style="font-weight: 500; letter-spacing: -0.025em;">BarangayConnect</span>
+                </div>
+                
+                <nav class="hidden md:flex items-center gap-8">
+                    <a href="#features" style="color: var(--muted-foreground); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--muted-foreground)'">Features</a>
+                    <a href="#benefits" style="color: var(--muted-foreground); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--muted-foreground)'">Benefits</a>
+                    <a href="#pricing" style="color: var(--muted-foreground); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--muted-foreground)'">Pricing</a>
+                    <a href="#contact" style="color: var(--muted-foreground); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--muted-foreground)'">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <button class="btn btn-secondary hidden md:inline-flex">Sign In</button>
+                    <button class="btn btn-primary">Get Started</button>
+                    <button class="md:hidden p-2" onclick="toggleMobileMenu()" style="background: transparent; border: none; cursor: pointer;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <nav class="flex flex-col gap-4">
+            <a href="#features" style="color: var(--foreground); text-decoration: none;" onclick="toggleMobileMenu()">Features</a>
+            <a href="#benefits" style="color: var(--foreground); text-decoration: none;" onclick="toggleMobileMenu()">Benefits</a>
+            <a href="#pricing" style="color: var(--foreground); text-decoration: none;" onclick="toggleMobileMenu()">Pricing</a>
+            <a href="#contact" style="color: var(--foreground); text-decoration: none;" onclick="toggleMobileMenu()">Contact</a>
+        </nav>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section style="padding-top: 8rem; padding-bottom: 4rem;">
+            <div class="container mx-auto px-4" style="max-width: 1200px;">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div style="display: flex; flex-direction: column; gap: 2rem;">
+                        <div class="badge">
+                            <span style="width: 0.5rem; height: 0.5rem; border-radius: 9999px; background-color: var(--primary);" class="pulse"></span>
+                            <span>Trusted by 300+ barangays nationwide</span>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <h1>Modern Record Management for Your Barangay</h1>
+                            <p style="color: var(--muted-foreground); max-width: 32rem;">
+                                Digitalize your barangay operations with efficient resident records, certificate issuance, and community services management.
+                            </p>
+                        </div>
+
+                        <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+                            <button class="btn btn-primary btn-lg">
+                                Start Free Trial
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                            <button class="btn btn-outline btn-lg">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                                </svg>
+                                Watch Demo
+                            </button>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 2rem; padding-top: 1rem; flex-wrap: wrap;">
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: 500; letter-spacing: -0.025em;">10K+</div>
+                                <p style="color: var(--muted-foreground);">Active Users</p>
+                            </div>
+                            <div style="width: 1px; height: 3rem; background-color: var(--border);"></div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: 500; letter-spacing: -0.025em;">98%</div>
+                                <p style="color: var(--muted-foreground);">Satisfaction Rate</p>
+                            </div>
+                            <div style="width: 1px; height: 3rem; background-color: var(--border);"></div>
+                            <div>
+                                <div style="font-size: 1.5rem; font-weight: 500; letter-spacing: -0.025em;">24/7</div>
+                                <p style="color: var(--muted-foreground);">Support</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="position: relative;">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top right, rgba(3, 2, 19, 0.2), rgba(233, 235, 239, 0.2)); border-radius: 1rem; filter: blur(3rem);"></div>
+                        <img src="https://images.unsplash.com/photo-1722643882339-7a6c9cb080db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBtZWV0aW5nJTIwZ292ZXJuYW5jZXxlbnwxfHx8fDE3NjEwNDk4MDN8MA&ixlib=rb-4.1.0&q=80&w=1080" alt="Community governance and collaboration" style="position: relative; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); width: 100%; object-fit: cover; aspect-ratio: 4/3;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" style="padding: 4rem 0; background-color: rgba(236, 236, 240, 0.3);">
+            <div class="container mx-auto px-4" style="max-width: 1200px;">
+                <div style="text-align: center; margin-bottom: 4rem;">
+                    <div style="display: inline-flex; padding: 0.375rem 0.75rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); color: var(--primary); margin-bottom: 1rem;">
+                        Features
+                    </div>
+                    <h2 style="margin-bottom: 1rem;">Complete Barangay Management Solution</h2>
+                    <p style="color: var(--muted-foreground); max-width: 42rem; margin: 0 auto;">
+                        Powerful tools designed to modernize barangay operations and serve your community better.
+                    </p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+                    <!-- Feature 1 -->
+                    <div class="card">
+                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.75rem;">Resident Database</h3>
+                        <p style="color: var(--muted-foreground);">Complete digital records of all barangay residents with household information and demographics.</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="card">
+                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <path d="m9 15 2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.75rem;">Barangay Clearance</h3>
+                        <p style="color: var(--muted-foreground);">Issue barangay clearance certificates digitally with automated validation and tracking.</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="card">
+                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.75rem;">Certificate Issuance</h3>
+                        <p style="color: var(--muted-foreground);">Generate certificates of residency, indigency, and other barangay documents instantly.</p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="card">
+                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                <path d="M9 12h6"></path>
+                                <path d="M9 16h6"></path>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.75rem;">Blotter Management</h3>
+                        <p style="color: var(--muted-foreground);">Record and track barangay incidents, complaints, and resolutions systematically.</p>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="card">
+                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                                <path d="M11 8v6"></path>
+                                <path d="M8 11h6"></path>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.75rem;">Business Permits</h3>
+                        <p style="color: var(--muted-foreground);">Process and manage barangay business permit applications and renewals efficiently.</p>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="card">
+                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.75rem;">Data Security</h3>
+                        <p style="color: var(--muted-foreground);">Secure storage with role-based access control compliant with Data Privacy Act.</p>
+                    </div>
+
+                    <!-- Feature 7 -->
+                    <div class="card">
+                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.75rem;">Reports & Analytics</h3>
+                        <p style="color: var(--muted-foreground);">Generate population reports, statistics, and compliance documents for government submission.</p>
+                    </div>
+
+                    <!-- Feature 8 -->
+                    <div class="card">
+                        <div class="icon-wrapper" style="margin-bottom: 0.75rem;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3 style="margin-bottom: 0.75rem;">Document Archive</h3>
+                        <p style="color: var(--muted-foreground);">Maintain organized archives of resolutions, ordinances, and official barangay records.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section id="benefits" style="padding: 4rem 0;">
+            <div class="container mx-auto px-4" style="max-width: 1200px;">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 lg:order-1">
+                        <img src="https://images.unsplash.com/photo-1709100450223-e8333fa09988?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsb2NhbCUyMGdvdmVybm1lbnQlMjBvZmZpY2V8ZW58MXx8fHwxNzYxMDQ5ODA1fDA&ixlib=rb-4.1.0&q=80&w=1080" alt="Modern barangay office operations" style="border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); width: 100%; object-fit: cover; aspect-ratio: 4/3;">
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;" class="order-1 lg:order-2">
+                        <div>
+                            <div style="display: inline-flex; padding: 0.375rem 0.75rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); color: var(--primary); margin-bottom: 1rem;">
+                                Benefits
+                            </div>
+                            <h2 style="margin-bottom: 1rem;">Modernize Your Barangay Operations</h2>
+                            <p style="color: var(--muted-foreground);">
+                                Empower your barangay with digital tools that improve efficiency, transparency, and service delivery to constituents.
+                            </p>
+                        </div>
+
+                        <ul style="list-style: none; display: flex; flex-direction: column; gap: 1rem;">
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
+                                <span>Reduce processing time for certificates from days to minutes</span>
+                            </li>
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
+                                <span>Eliminate paper-based records and filing cabinets</span>
+                            </li>
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
+                                <span>Access resident data securely from any device</span>
+                            </li>
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
+                                <span>Generate accurate population reports instantly</span>
+                            </li>
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
+                                <span>Comply with Data Privacy Act requirements</span>
+                            </li>
+                            <li style="display: flex; align-items: start; gap: 0.75rem;">
+                                <div style="width: 1.25rem; height: 1.25rem; border-radius: 9999px; background-color: rgba(3, 2, 19, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.125rem;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
+                                <span>Improve transparency and accountability in barangay services</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section style="padding: 4rem 0;">
+            <div class="container mx-auto px-4" style="max-width: 1200px;">
+                <div style="position: relative; overflow: hidden; border-radius: 1.5rem; background: linear-gradient(to bottom right, var(--primary), rgba(3, 2, 19, 0.8)); padding: 4rem 2rem;">
+                    <div style="position: absolute; inset: 0; opacity: 0.1;">
+                        <img src="https://images.unsplash.com/photo-1758411898049-4de9588be514?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkaWdpdGFsJTIwZGFzaGJvYXJkJTIwaW50ZXJmYWNlfGVufDF8fHx8MTc2MTA0MDUyMXww&ixlib=rb-4.1.0&q=80&w=1080" alt="Dashboard interface" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    
+                    <div style="position: relative; z-index: 10; text-align: center; max-width: 48rem; margin: 0 auto; color: white;">
+                        <h2 style="color: white; margin-bottom: 1.5rem;">Ready to Digitalize Your Barangay?</h2>
+                        <p style="opacity: 0.9; max-width: 42rem; margin: 0 auto 2rem;">
+                            Join hundreds of barangays nationwide who have modernized their operations. 
+                            Start your free 30-day trial today—no credit card required.
+                        </p>
+                        
+                        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; padding-top: 1rem;">
+                            <button class="btn btn-secondary btn-lg">
+                                Start Free Trial
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                            <button class="btn btn-outline btn-lg" style="background-color: transparent; border-color: rgba(255, 255, 255, 0.2); color: white;">
+                                Schedule Demo
+                            </button>
+                        </div>
+
+                        <p style="opacity: 0.7; padding-top: 1.5rem; font-size: 0.875rem;">
+                            Free 30-day trial • No credit card required • Cancel anytime
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer style="border-top: 1px solid var(--border); background-color: rgba(236, 236, 240, 0.3);">
+        <div class="container mx-auto px-4 py-12" style="max-width: 1200px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 2rem; height: 2rem; background-color: var(--primary); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: var(--primary-foreground); font-weight: 600;">
+                            B
+                        </div>
+                        <span style="font-weight: 500; letter-spacing: -0.025em;">BarangayConnect</span>
+                    </div>
+                    <p style="color: var(--muted-foreground);">
+                        Modern barangay management made simple.
+                    </p>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <a href="#" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background-color: var(--muted); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--foreground);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background-color: var(--muted); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--foreground);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background-color: var(--muted); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--foreground);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                <rect x="2" y="9" width="4" height="12"></rect>
+                                <circle cx="4" cy="4" r="2"></circle>
+                            </svg>
+                        </a>
+                        <a href="#" style="width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background-color: var(--muted); display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--foreground);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Product</h4>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Features</a></li>
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Pricing</a></li>
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Security</a></li>
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Roadmap</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Company</h4>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">About Us</a></li>
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Careers</a></li>
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Blog</a></li>
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Resources</h4>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Documentation</a></li>
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Help Center</a></li>
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">API Reference</a></li>
+                        <li><a href="#" style="color: var(--muted-foreground); text-decoration: none;">Community</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="padding-top: 2rem; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 1rem; align-items: center; justify-content: space-between;">
+                <p style="color: var(--muted-foreground); text-align: center;">
+                    © 2025 BarangayConnect. All rights reserved.
+                </p>
+                <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
+                    <a href="#" style="color: var(--muted-foreground); text-decoration: none;">Privacy Policy</a>
+                    <a href="#" style="color: var(--muted-foreground); text-decoration: none;">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
