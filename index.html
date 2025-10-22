@@ -56,28 +56,183 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       padding: 2rem;
       margin-bottom: 2rem;
+      text-align: center;
     }
     .section-title {
       font-size: 1.8rem;
       font-weight: 700;
       color: #0a6c74;
       margin-bottom: 1rem;
+      text-align: center;
     }
-    .features-grid {
+    .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.5rem;
+      margin-top: 1rem;
     }
-    .feature-item {
-      background: white;
-      border-left: 4px solid #118f9d;
-      border-radius: 8px;
-      padding: 1.2rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    .features .card h3 {
+      color: #0a6c74;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
     }
-    .feature-item h4 {color: #0a6c74; margin-bottom: 0.5rem;}
+    .features .card p {
+      font-size: 0.95rem;
+      color: #444;
+    }
     .contact {
       background: #0a6c74;
       color: white;
       padding: 80px 15%;
       text-align: center;
+    }
+    .contact h3 {font-size: 1.8rem; margin-bottom: 1rem;}
+    .contact p {margin-bottom: 0.5rem;}
+    footer {
+      background: #084f56;
+      color: #d4e9eb;
+      text-align: center;
+      padding: 1rem 0;
+      font-size: 0.9rem;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 300px;
+      text-align: center;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 0.7rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .close {cursor: pointer; color: #888; float: right;}
+    .close:hover {color: #0a6c74;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Resident Record Management System</h1>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#overview">Overview</a>
+      <a href="#features">Features</a>
+      <a href="#contact">Contact</a>
+      <a href="#" id="loginBtn">Login</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <h2>Digital • Centralized • Secure</h2>
+    <p>A modern system for efficient barangay resident and household management</p>
+    <button class="btn" onclick="scrollToSection('about')">Get Started</button>
+  </section>
+
+  <section id="about">
+    <div class="card">
+      <h3 class="section-title">About the System</h3>
+      <p>The Barangay Resident Record Management System is a digital platform designed to help barangay staff efficiently record, organize, and manage resident and household information. It replaces paper forms and spreadsheets with a centralized and structured database.</p>
+      <br>
+      <p><strong>👤 Intended Use:</strong> Single-user / Admin-only (authorized barangay personnel). Functions include adding, updating, searching, and reporting resident data to support barangay operations and planning.</p>
+    </div>
+  </section>
+
+  <section id="overview">
+    <div class="card">
+      <h3 class="section-title">Overview</h3>
+      <p>This system streamlines record management by digitizing the process, allowing barangay staff to maintain accurate and updated resident data. It also enables faster reporting, easier tracking of demographics, and better community planning insights.</p>
+    </div>
+  </section>
+
+  <section id="features">
+    <h3 class="section-title">Key Features</h3>
+    <div class="features">
+      <div class="card">
+        <h3>🧾 Resident Information</h3>
+        <p>Add, view, update, and manage complete resident records efficiently.</p>
+      </div>
+      <div class="card">
+        <h3>🏠 Household Profiling</h3>
+        <p>Group residents by household, identify family heads, and track members.</p>
+      </div>
+      <div class="card">
+        <h3>🔎 Search & Filter</h3>
+        <p>Find residents easily by name, age, or address with quick filtering options.</p>
+      </div>
+      <div class="card">
+        <h3>🏷️ Categorization</h3>
+        <p>Tag residents as Senior Citizen, PWD, Student, Voter/Non-voter, etc.</p>
+      </div>
+      <div class="card">
+        <h3>📊 Reports & Statistics</h3>
+        <p>Generate population reports, household counts, and age distributions.</p>
+      </div>
+      <div class="card">
+        <h3>🔒 Admin Access</h3>
+        <p>Restricted system access for authorized barangay personnel only.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <h3>Contact Us</h3>
+    <p>📍 Barangay Hall, Your Municipality</p>
+    <p>📧 Email: <a href="mailto:info@barangayrecords.ph" style="color:#d9f1f3;">info@barangayrecords.ph</a></p>
+    <p>📞 Contact: +63 912 345 6789</p>
+    <p>📅 Office Hours: Mon–Fri, 8:00 AM – 5:00 PM</p>
+  </section>
+
+  <footer>
+    © 2025 Barangay Resident Record Management System | All Rights Reserved
+  </footer>
+
+  <!-- Login Modal -->
+
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>Admin Login</h3>
+      <input type="text" placeholder="Username" />
+      <input type="password" placeholder="Password" />
+      <button class="btn">Login</button>
+    </div>
+  </div>
+
+  <script>
+    // Smooth scroll
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({behavior: "smooth"});
+    }
+    document.querySelectorAll("nav a[href^='#']").forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const target = link.getAttribute("href").substring(1);
+        scrollToSection(target);
+      });
+    });
+
+    // Login modal
+    const loginBtn = document.getElementById("loginBtn");
+    const modal = document.getElementById("loginModal");
+    const closeModal = document.getElementById("closeModal");
+    loginBtn.onclick = () => (modal.style.display = "flex");
+    closeModal.onclick = () => (modal.style.display = "none");
+    window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+  </script>
+
+</body>
+</html>
