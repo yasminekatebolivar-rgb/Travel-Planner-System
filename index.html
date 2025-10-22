@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BarangayHub - Resident Record Management System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,15 +13,16 @@
         }
 
         :root {
-            --primary-navy: #1a3a52;
-            --accent-teal: #1b7a78;
-            --accent-gold: #d4a574;
-            --light-bg: #f8f9fa;
+            --primary-green: #1b5e20;
+            --secondary-green: #2e7d32;
+            --accent-green: #43a047;
+            --light-green: #c8e6c9;
+            --light-bg: #f1f8f4;
             --white: #ffffff;
-            --text-dark: #2c3e50;
-            --text-light: #5a6c7d;
-            --shadow: 0 8px 24px rgba(26, 58, 82, 0.12);
-            --shadow-lg: 0 15px 40px rgba(26, 58, 82, 0.15);
+            --text-dark: #1b3d1b;
+            --text-light: #4a6741;
+            --shadow: 0 8px 24px rgba(27, 94, 32, 0.12);
+            --shadow-lg: 0 15px 40px rgba(27, 94, 32, 0.15);
             --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
@@ -30,7 +31,7 @@
         }
 
         body {
-            font-family: 'Lato', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
             line-height: 1.8;
             overflow-x: hidden;
@@ -41,7 +42,7 @@
         header {
             position: sticky;
             top: 0;
-            background: linear-gradient(135deg, var(--primary-navy) 0%, #2a4a65 100%);
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
             box-shadow: var(--shadow);
             z-index: 100;
             padding: 1.2rem 0;
@@ -66,32 +67,33 @@
         .logo-icon {
             width: 45px;
             height: 45px;
-            background: linear-gradient(135deg, var(--accent-gold), #e8c89f);
+            background: linear-gradient(135deg, var(--accent-green), #66bb6a);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.8rem;
             font-weight: 900;
-            color: var(--primary-navy);
-            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(67, 160, 71, 0.3);
         }
 
         .logo-text {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Montserrat', sans-serif;
             font-size: 1.6rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--white);
             letter-spacing: 0.5px;
         }
 
         .logo-subtext {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             font-size: 0.65rem;
-            color: var(--accent-gold);
+            color: var(--accent-green);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-top: -2px;
+            font-weight: 700;
         }
 
         .nav-links {
@@ -109,7 +111,7 @@
             position: relative;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .nav-links a::before {
@@ -119,7 +121,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--accent-gold);
+            background: var(--accent-green);
             transition: var(--transition);
         }
 
@@ -128,24 +130,24 @@
         }
 
         .login-btn {
-            background: var(--accent-gold);
-            color: var(--primary-navy);
+            background: var(--accent-green);
+            color: var(--white);
             padding: 0.8rem 2rem;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 700;
             transition: var(--transition);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             text-transform: uppercase;
             font-size: 0.85rem;
-            box-shadow: 0 4px 12px rgba(212, 165, 116, 0.25);
+            box-shadow: 0 4px 12px rgba(67, 160, 71, 0.25);
         }
 
         .login-btn:hover {
-            background: #e8c89f;
+            background: #66bb6a;
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.35);
+            box-shadow: 0 8px 20px rgba(67, 160, 71, 0.35);
         }
 
         @media (max-width: 768px) {
@@ -184,7 +186,7 @@
         /* ===== HERO SECTION ===== */
         .hero {
             height: 100vh;
-            background: linear-gradient(135deg, rgba(26, 58, 82, 0.85), rgba(27, 122, 120, 0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/><circle cx="150" cy="150" r="100" fill="%23d4a574" opacity="0.08"/><circle cx="1000" cy="600" r="150" fill="%231b7a78" opacity="0.05"/></svg>');
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.85), rgba(46, 125, 50, 0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="url(%23grid)"/><circle cx="150" cy="150" r="100" fill="%2366bb6a" opacity="0.08"/><circle cx="1000" cy="600" r="150" fill="%232e7d32" opacity="0.05"/></svg>');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -203,7 +205,7 @@
             right: -15%;
             width: 700px;
             height: 700px;
-            background: radial-gradient(circle, rgba(212, 165, 116, 0.08), transparent);
+            background: radial-gradient(circle, rgba(102, 187, 106, 0.08), transparent);
             border-radius: 50%;
             animation: float 8s ease-in-out infinite;
         }
